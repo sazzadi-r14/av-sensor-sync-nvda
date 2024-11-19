@@ -1,6 +1,8 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include "SensorData.h"
+#include "ParallelQueue.h"
 #include <string>
 #include <vector>
 #include <utility> // for pair
@@ -9,12 +11,12 @@ class Sensor {
 public:
     virtual ~Sensor() {}
 
-    // Pure virtual functions to be implemented by child classes
-    virtual string getType() const = 0;
-    virtual string getModel() const = 0;
-    virtual pair<int, int> getResponseRate() const = 0; // Best and worst response time
-    virtual vector<int> getOutputShape() const = 0;
-    virtual void simulateData() = 0;
+    virtual std::string getType() const = 0;
+    virtual std::string getModel() const = 0;
+    virtual std::pair<int, int> getResponseRate() const = 0;
+    virtual std::vector<int> getOutputShape() const = 0;
+
+    virtual void simulateData(ParallelQueue& queue, int sensorId) = 0; // Pass queue to push data
 
 protected:
     string type;

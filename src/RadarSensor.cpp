@@ -1,40 +1,55 @@
 #include "RadarSensor.h"
-using namespace std;
+#include <chrono>
+#include <thread>
+#include <iostream>
+#include <random>
 
-RadarSensor::RadarSensor(const string& model) {
+RadarSensor::RadarSensor(const std::string& model) {
     this->type = "Radar";
     this->model = model;
-    this->responseRate = {20, 50}; // 20ms to 50ms
-    this->outputShape = {0, 4}; // Dynamic number of objects
+    this->responseRate = {20, 50}; // Random delay between 20ms to 50ms
+    this->outputShape = {0, 4};   // Dynamic: n objects with {range, azimuth, velocity, intensity}
 }
 
-string RadarSensor::getType() const {
+std::string RadarSensor::getType() const {
     return type;
 }
 
-string RadarSensor::getModel() const {
+std::string RadarSensor::getModel() const {
     return model;
 }
 
-pair<int, int> RadarSensor::getResponseRate() const {
+std::pair<int, int> RadarSensor::getResponseRate() const {
     return responseRate;
 }
 
-vector<int> RadarSensor::getOutputShape() const {
+std::vector<int> RadarSensor::getOutputShape() const {
     return {randomObjectCount(), 4};
 }
 
-void RadarSensor::simulateData() {
+void RadarSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
-        this_thread::sleep_for(chrono::milliseconds(responseRate.first));
-        int objects = randomObjectCount();
-        cout << "Radar (" << model << ") detected " << objects << " objects." << endl;
+        int delay = rand() % (responseRate.second - responseRate.first + 1) + responseRate.first;
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+
+        int objectCount = randomObjectCount();
+        std::vector<std::vector<float>> detections;
+        for (int i = 0; i < objectCount; ++i) {
+            detections.push_back({static_cast<float>(rand() % 500), static_cast<float>(rand() % 360), static_cast<float>(rand() % 20 - 10), static_cast<float>(rand() % 100) / 100.0f});
+        }
+
+        SensorData sensorData{
+            sensorId,
+            "Radar",
+            detections,
+            std::chrono::system_clock::now()
+        };
+
+        queue.push(sensorData);
+        std::cout << "Radar (" << model << ") pushed detection data for " << objectCount << " objects.\n";
     }
 }
 
 int RadarSensor::randomObjectCount() const {
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dis(10, 50); // Randomly choose 10 to 50 objects
-    return dis(gen);
+    return rand() % 50 + 1; // Between 1 and 50 objects
 }

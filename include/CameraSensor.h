@@ -14,7 +14,7 @@ public:
     string getModel() const override;
     pair<int, int> getResponseRate() const override;
     vector<int> getOutputShape() const override;
-    void simulateData() override;
+    void simulateData(ParallelQueue& queue, int sensorId) override;
 
 private:
     int fps; // Frames per second

@@ -2,19 +2,24 @@
 #define SENSOR_MANAGER_H
 
 #include "Sensor.h"
+#include "ParallelQueue.h"
 #include <vector>
-#include <memory>
 #include <thread>
-using namespace std;
+#include <memory>
 
 class SensorManager {
 public:
-    void addSensor(unique_ptr<Sensor> sensor);
+    void addSensor(std::shared_ptr<Sensor> sensor, int sensorId);
     void start();
+    void stop();
 
 private:
-    vector<unique_ptr<Sensor>> sensors;
-    vector<thread> sensorThreads;
+    std::vector<std::pair<std::shared_ptr<Sensor>, int>> sensors; // Sensors with IDs
+    std::vector<std::thread> threads;
+    ParallelQueue dataQueue;
+    bool running = true;
+
+    void processData(); // Handle data synchronization and forwarding
 };
 
 #endif

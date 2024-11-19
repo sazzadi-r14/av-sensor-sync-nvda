@@ -1,32 +1,50 @@
 #include "LidarSensor.h"
-using namespace std;
+#include <chrono>
+#include <thread>
+#include <iostream>
 
-LidarSensor::LidarSensor(const string& model) {
+LidarSensor::LidarSensor(const std::string& model) {
     this->type = "Lidar";
     this->model = model;
-    this->responseRate = {40, 50};
-    this->outputShape = {88462, 4};
+    this->responseRate = {50, 50}; // Fixed at 20 Hz
+    this->outputShape = {88462, 4}; // 4 = x, y, z, intensity
+    this->n = 88462;
 }
 
-string LidarSensor::getType() const {
+std::string LidarSensor::getType() const {
     return type;
 }
 
-string LidarSensor::getModel() const {
+std::string LidarSensor::getModel() const {
     return model;
 }
 
-pair<int, int> LidarSensor::getResponseRate() const {
+std::pair<int, int> LidarSensor::getResponseRate() const {
     return responseRate;
 }
 
-vector<int> LidarSensor::getOutputShape() const {
+std::vector<int> LidarSensor::getOutputShape() const {
     return outputShape;
 }
 
-void LidarSensor::simulateData() {
+void LidarSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
-        this_thread::sleep_for(chrono::milliseconds(responseRate.first));
-        cout << "Lidar (" << model << ") generated point cloud data." << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(responseRate.first));
+
+        // Simulate point cloud data
+        std::vector<std::vector<float>> pointCloud;
+        for (int i = 0; i < n; ++i) {
+            pointCloud.push_back({static_cast<float>(rand() % 100), static_cast<float>(rand() % 100), static_cast<float>(rand() % 100), static_cast<float>(static_cast<float>(rand() % 10) / 10.0f)});
+        }
+
+        SensorData sensorData{
+            sensorId,
+            "Lidar",
+            pointCloud,
+            std::chrono::system_clock::now()
+        };
+
+        queue.push(sensorData);
+        std::cout << "Lidar (" << model << ") pushed point cloud data.\n";
     }
 }

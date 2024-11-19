@@ -26,10 +26,22 @@ vector<int> CameraSensor::getOutputShape() const {
     return outputShape;
 }
 
-void CameraSensor::simulateData() {
-    
+
+void CameraSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
-        this_thread::sleep_for(chrono::milliseconds(responseTime));
-        cout << "Camera (" << model << ") generated a frame." << endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(responseTime));
+
+        // Simulate camera data
+        SensorOutput data = std::vector<std::vector<std::vector<int>>>(
+            2160, std::vector<std::vector<int>>(3840, std::vector<int>(3, 255)));
+
+        SensorData sensorData{
+            sensorId,
+            "Camera",
+            data,
+            std::chrono::system_clock::now()
+        };
+
+        queue.push(sensorData);
     }
 }
