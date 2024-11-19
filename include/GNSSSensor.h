@@ -16,10 +16,6 @@ public:
     pair<int, int> getResponseRate() const override;
     vector<int> getOutputShape() const override;
     void simulateData() override;
-
-private:
-    void simulateIMU();
-    void simulatePosition();
 };
 
 #endif

@@ -4,7 +4,7 @@ using namespace std;
 LidarSensor::LidarSensor(const string& model) {
     this->type = "Lidar";
     this->model = model;
-    this->responseRate = {50, 50}; // Fixed at 20 Hz (50ms)
+    this->responseRate = {40, 50};
     this->outputShape = {88462, 4};
 }
 

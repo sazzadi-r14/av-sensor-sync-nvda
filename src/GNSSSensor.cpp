@@ -4,8 +4,8 @@ using namespace std;
 GNSSSensor::GNSSSensor(const string& model) {
     this->type = "GNSS";
     this->model = model;
-    this->responseRate = {50, 1000}; // GPS: 50ms-1000ms
-    this->outputShape = {1, 3}; // Position: (latitude, longitude, altitude)
+    this->responseRate = {10, 50}; // GPS: 50ms-1000ms
+    this->outputShape = {1, 11}; // Position: (latitude, longitude, altitude, speed, velocity, ax, ay, az, wx, wy, wz)
 }
 
 string GNSSSensor::getType() const {
@@ -25,23 +25,8 @@ vector<int> GNSSSensor::getOutputShape() const {
 }
 
 void GNSSSensor::simulateData() {
-    thread imuThread(&GNSSSensor::simulateIMU, this);
-    thread positionThread(&GNSSSensor::simulatePosition, this);
-
-    imuThread.join();
-    positionThread.join();
-}
-
-void GNSSSensor::simulateIMU() {
     while (true) {
-        this_thread::sleep_for(chrono::milliseconds(5));
-        cout << "GNSS IMU generated accelerometer and gyroscope data." << endl;
-    }
-}
-
-void GNSSSensor::simulatePosition() {
-    while (true) {
-        this_thread::sleep_for(chrono::milliseconds(500));
-        cout << "GNSS generated position data (latitude, longitude, altitude)." << endl;
+        this_thread::sleep_for(chrono::milliseconds(responseRate.first));
+        cout << "Lidar (" << model << ") generated point cloud data." << endl;
     }
 }
