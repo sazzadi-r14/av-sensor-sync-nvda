@@ -96,3 +96,21 @@ To add a new sensor type:
 1. Create a new `.cpp` file in the `src/` folder (e.g., `RadarSensor.cpp`).
 2. Implement the sensor by inheriting from the `Sensor` base class.
 3. Add the new sensor file to the `CMakeLists.txt` under the `add_executable` section.
+
+
+
+Assumptions in the system
+based on https://developer.nvidia.com/drive/ecosystem-orin
+add atleast one of all kind of supported sensors.
+Lidar, Radar, GNSS, Camera
+
+one thing you wanna think about that tsensors might percieve differetn thing by the time input from another sensor ocmes in, you have to make a design decision of what's the right thing to do under this situation. do you take average, or something else, or do you just take the earliest possible response or something like that.
+
+
+
+Trying to replicate the Mercedes x Nvidia System
+
+Cool ideas from nvidia driveworks sdk
+- synchronzied timestamping of sensor data. look at cool ways to create a data structure, think about the insertion time of the DSA as this is very performance critical. also this is another thing that should be part of the profiling, as eventually you may wanna look how much time insertion took, and delta of average polling rate from all sensors.
+- replaying this would be cool haha
+- 

@@ -9,4 +9,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(include)
 
 # Add source files
-add_executable(AVSensorSyncNVDA src/main.cpp src/SensorManager.cpp)
+add_executable(AVSensorSyncNVDA src/main.cpp src/SensorManager.cpp src/SensorFactory.cpp src/LidarSensor.cpp src/RadarSensor.cpp src/CameraSensor.cpp src/GNSSSensor.cpp)

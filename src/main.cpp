@@ -1,20 +1,18 @@
-#include <iostream>
-#include "Sensor.h"
+#include "SensorFactory.h"
 #include "SensorManager.h"
-
-// Include the specific sensor implementation
-#include "Sensor.cpp"
+using namespace std;
 
 int main() {
     SensorManager manager;
 
-    // Create a Lidar sensor and add it to the manager
-    Sensor* lidar = new LidarSensor();
-    manager.addSensor(lidar);
+    // Add sensors
+    manager.addSensor(SensorFactory::createSensor("Camera", "Sony IMX728", 30));
+    manager.addSensor(SensorFactory::createSensor("Lidar", "Luminar Iris"));
+    manager.addSensor(SensorFactory::createSensor("Radar", "Arbe A4"));
+    manager.addSensor(SensorFactory::createSensor("GNSS", "NovAtel PwrPak7D-E1"));
 
-    // Collect data
-    manager.collectData();
+    // Start the simulation
+    manager.start();
 
-    delete lidar; // Clean up dynamically allocated memory
     return 0;
 }

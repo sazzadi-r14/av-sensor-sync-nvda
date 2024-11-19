@@ -1,12 +1,19 @@
 #include "SensorManager.h"
-#include <iostream>
 
-void SensorManager::addSensor(Sensor* sensor) {
-    sensors.push_back(sensor);
+using namespace std;
+
+void SensorManager::addSensor(unique_ptr<Sensor> sensor) {
+    sensors.push_back(std::move(sensor));
 }
 
-void SensorManager::collectData() {
-    for (const auto& sensor : sensors) {
-        std::cout << sensor->generateData() << std::endl;
+void SensorManager::start() {
+    for (auto& sensor : sensors) {
+        sensorThreads.emplace_back(&Sensor::simulateData, sensor.get());
+    }
+
+    for (auto& thread : sensorThreads) {
+        if (thread.joinable()) {
+            thread.join();
+        }
     }
 }

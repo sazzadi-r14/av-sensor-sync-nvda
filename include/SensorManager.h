@@ -1,16 +1,20 @@
 #ifndef SENSOR_MANAGER_H
 #define SENSOR_MANAGER_H
 
-#include <vector>
 #include "Sensor.h"
+#include <vector>
+#include <memory>
+#include <thread>
+using namespace std;
 
 class SensorManager {
 public:
-    void addSensor(Sensor* sensor);
-    void collectData();
+    void addSensor(unique_ptr<Sensor> sensor);
+    void start();
 
 private:
-    std::vector<Sensor*> sensors;
+    vector<unique_ptr<Sensor>> sensors;
+    vector<thread> sensorThreads;
 };
 
 #endif
