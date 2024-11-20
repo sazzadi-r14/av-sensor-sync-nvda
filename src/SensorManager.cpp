@@ -72,7 +72,7 @@ void SensorManager::profileSystem() {
 
     std::cout << "Total Estimated Throughput: " << (total_throughput) / (1024 * 1024) << " MB/s\n";
 
-    refreshRate = maxWorstCaseTime; // WCET as the system refresh rate
+    refreshRate = maxWorstCaseTime*2; // WCET as the system refresh rate
 
     std::cout << "\nSystem Refresh Rate (WCET): " << refreshRate << " ms\n";
     std::cout << "Press ENTER to confirm and start the system...\n";
@@ -115,34 +115,52 @@ void SensorManager::stop() {
 }
 
 void SensorManager::processData() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(refreshRate));
     while (running) {
+        std::cout << "=== Processing Cycle Started ===\n";
         auto startTime = std::chrono::steady_clock::now();
 
         // Retrieve the latest sensor data
+        auto latestrettimestart = std::chrono::steady_clock::now();
         auto latestData = dataQueue.retrieveLatest();
+        auto latestrettimeend = std::chrono::steady_clock::now();
 
         // Retrieve all historical data and clear the queue
+        auto allandclearstart = std::chrono::steady_clock::now();
         auto allData = dataQueue.retrieveAllAndClear();
+        auto allandclearend = std::chrono::steady_clock::now();
 
         // Save historical data to disk
-        saveDataToDisk(allData);
+        auto savetodiskstart = std::chrono::steady_clock::now();
+        // saveDataToDisk(allData);
+        auto savetodiskend = std::chrono::steady_clock::now();
 
         // Send the latest data to the control system
+        auto sendtocontrolsystemstart = std::chrono::steady_clock::now();
         sendToControlSystem(latestData);
+        auto sendtocontrolsystemend = std::chrono::steady_clock::now();
 
         // Wait for the remaining time in the refresh cycle
         auto elapsed = std::chrono::steady_clock::now() - startTime;
         auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
+        // Now one by one calculate the time taken by each operation and print it
+        std::cout << "Time taken to retrieve latest data: " << std::chrono::duration_cast<std::chrono::milliseconds>(latestrettimeend - latestrettimestart).count() << " ms\n";
+        std::cout << "Time taken to retrieve all and clear: " << std::chrono::duration_cast<std::chrono::milliseconds>(allandclearend - allandclearstart).count() << " ms\n";
+        std::cout << "Time taken to save data to disk: " << std::chrono::duration_cast<std::chrono::milliseconds>(savetodiskend - savetodiskstart).count() << " ms\n";
+        std::cout << "Time taken to send data to control system: " << std::chrono::duration_cast<std::chrono::milliseconds>(sendtocontrolsystemend - sendtocontrolsystemstart).count() << " ms\n";
+        std::cout << "Time taken to wait for the remaining time in the refresh cycle: " << elapsedMs << " ms\n";
+
         if (elapsedMs < refreshRate) {
             std::this_thread::sleep_for(std::chrono::milliseconds(refreshRate - elapsedMs));
         }
+        std::cout << "=== Processing Cycle Completed ===\n";
     }
 }
 
 void SensorManager::saveDataToDisk(const std::vector<SensorData>& data) {
     json jsonData;
-
+    cout << "=== Saving Data to Disk ===\n";
     for (const auto& sensorData : data) {
         json entry;
         entry["sensorId"] = sensorData.sensorId;
@@ -169,11 +187,12 @@ void SensorManager::saveDataToDisk(const std::vector<SensorData>& data) {
 }
 
 void SensorManager::sendToControlSystem(const std::unordered_map<int, SensorData>& latestData) {
-    for (const auto& [id, sensorData] : latestData) {
-        // Simulate sending to the control system
-        std::cout << "Sending data to control system: Sensor ID " << id
-                  << ", Type: " << sensorData.sensorType << std::endl;
-    }
+    cout << "=== Sending one round of Data to Control System ===\n";
+    // for (const auto& [id, sensorData] : latestData) {
+    //     // Simulate sending to the control system
+    //     std::cout << "Sending data to control system: Sensor ID " << id
+    //               << ", Type: " << sensorData.sensorType << std::endl;
+    // }
 }
 
 int SensorManager::calculateRefreshRate() {

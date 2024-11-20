@@ -1,4 +1,5 @@
 #include "ParallelQueue.h"
+#include <iostream>
 
 void ParallelQueue::push(const SensorData& data) {
     std::lock_guard<std::mutex> lock(mtx);
@@ -9,6 +10,7 @@ void ParallelQueue::push(const SensorData& data) {
     // Add data to the queue, but prevent overflow
     queue.push(data);
     if (queue.size() > MAX_SIZE) {
+        // std::cout << "Warning: Queue size exceeded maximum size of " << MAX_SIZE << ". Clearing queue.\n";
         queue.pop();
     }
 }
