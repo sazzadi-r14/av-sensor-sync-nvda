@@ -2,6 +2,20 @@
 
 # AV Sensor Synchronization Simulation
 
+
+This function/module is part of the system's computational graph.
+
+![Computational Graph](cfg.png)
+
+The detailed design of the current computational graph is illustrated below:
+
+![Detailed Computational Graph](cfg_detailed.png)
+
+Note: This computational graph is designed to be heavily extensible. The extensibility plans are depicted in a section below.:
+
+
+
+
 This project simulates sensor synchronization in autonomous vehicles (AVs). It models multiple sensors—Camera, LiDAR, Radar, and GNSS—each with unique response times and data outputs. The goal is to achieve synchronized data collection, simulating how an AV would integrate sensor inputs to understand its environment comprehensively.
 
 ## Features
@@ -131,6 +145,9 @@ Each sensor simulates data generation specific to its real-world counterpart:
 - **Profiling Output:** Displays sensor-specific performance metrics in a formatted manner.
 
 ## Extending the Project
+
+![Extensibility Plans](cfg_exntensbility.png)
+This is a graph of the abstraction showing how this can be extended.
 
 ### Adding New Sensors
 
