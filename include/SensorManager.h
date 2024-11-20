@@ -6,20 +6,25 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <fstream> // For file handling
 
 class SensorManager {
 public:
     void addSensor(std::shared_ptr<Sensor> sensor, int sensorId);
+    void profileSystem();
     void start();
     void stop();
 
 private:
     std::vector<std::pair<std::shared_ptr<Sensor>, int>> sensors; // Sensors with IDs
-    std::vector<std::thread> threads;
     ParallelQueue dataQueue;
     bool running = true;
+    int refreshRate = 1000; // Refresh rate in milliseconds (default)
 
-    void processData(); // Handle data synchronization and forwarding
+    void processData();
+    void saveDataToDisk(const std::vector<SensorData>& data);
+    void sendToControlSystem(const std::unordered_map<int, SensorData>& latestData);
+    int calculateRefreshRate();
 };
 
 #endif

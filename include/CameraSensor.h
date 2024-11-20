@@ -14,6 +14,8 @@ public:
     string getModel() const override;
     pair<int, int> getResponseRate() const override;
     vector<int> getOutputShape() const override;
+     // Return the variant-based data representation
+    SensorOutput getOutputShapeVariant() const override;
     void simulateData(ParallelQueue& queue, int sensorId) override;
 
 private:

@@ -26,6 +26,12 @@ vector<int> CameraSensor::getOutputShape() const {
     return outputShape;
 }
 
+// Return the variant representation of the output shape
+SensorOutput CameraSensor::getOutputShapeVariant() const {
+    return std::vector<std::vector<std::vector<int>>>(
+        2160, std::vector<std::vector<int>>(3840, std::vector<int>(3)));
+}
+
 
 void CameraSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {

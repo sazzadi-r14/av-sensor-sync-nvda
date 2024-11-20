@@ -27,6 +27,11 @@ std::vector<int> RadarSensor::getOutputShape() const {
     return {randomObjectCount(), 4};
 }
 
+SensorOutput RadarSensor::getOutputShapeVariant() const {
+    return std::vector<std::vector<float>>(
+        maxObjects, std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}); // range, azimuth, velocity, intensity
+}
+
 void RadarSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
         int delay = rand() % (responseRate.second - responseRate.first + 1) + responseRate.first;
@@ -46,10 +51,10 @@ void RadarSensor::simulateData(ParallelQueue& queue, int sensorId) {
         };
 
         queue.push(sensorData);
-        std::cout << "Radar (" << model << ") pushed detection data for " << objectCount << " objects.\n";
+        //std::cout << "Radar (" << model << ") pushed detection data for " << objectCount << " objects.\n";
     }
 }
 
 int RadarSensor::randomObjectCount() const {
-    return rand() % 50 + 1; // Between 1 and 50 objects
+    return rand() % 199 + 1; // Between 1 and 50 objects
 }

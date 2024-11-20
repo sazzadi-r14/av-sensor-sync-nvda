@@ -27,6 +27,14 @@ std::vector<int> GNSSSensor::getOutputShape() const {
     return outputShape;
 }
 
+SensorOutput GNSSSensor::getOutputShapeVariant() const {
+    return std::vector<float>{0.0f, 0.0f, 0.0f, // Position: lat, lon, alt
+                              0.0f, 0.0f,       // Velocity: speed, direction
+                              0.0f, 0.0f, 0.0f, // Acceleration: ax, ay, az
+                              0.0f, 0.0f, 0.0f}; // Angular velocity: wx, wy, wz
+}
+
+
 void GNSSSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(responseRate.first));
@@ -44,11 +52,11 @@ void GNSSSensor::simulateData(ParallelQueue& queue, int sensorId) {
         queue.push(sensorData);
 
         // Log GNSS simulation
-        std::cout << "GNSS (" << model << ") pushed 1x11 data: ";
-        for (const auto& val : gnssData) {
-            std::cout << val << " ";
-        }
-        std::cout << std::endl;
+        // std::cout << "GNSS (" << model << ") pushed 1x11 data: ";
+        // for (const auto& val : gnssData) {
+        //     std::cout << val << " ";
+        // }
+        // std::cout << std::endl;
     }
 }
 

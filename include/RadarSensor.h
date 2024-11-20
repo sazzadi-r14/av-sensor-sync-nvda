@@ -20,9 +20,12 @@ public:
     std::string getModel() const override;
     std::pair<int, int> getResponseRate() const override;
     std::vector<int> getOutputShape() const override;
+     // Return the variant-based data representation
+    SensorOutput getOutputShapeVariant() const override;
     void simulateData(ParallelQueue& queue, int sensorId) override;
 
 private:
+    int maxObjects = 200; // Max objects detected
     int randomObjectCount() const;
 };
 

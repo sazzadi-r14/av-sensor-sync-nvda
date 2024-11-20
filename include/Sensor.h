@@ -6,7 +6,10 @@
 #include <string>
 #include <vector>
 #include <utility> // for pair
+#include <variant> // for std::variant
+
 using namespace std;
+
 class Sensor {
 public:
     virtual ~Sensor() {}
@@ -15,6 +18,9 @@ public:
     virtual std::string getModel() const = 0;
     virtual std::pair<int, int> getResponseRate() const = 0;
     virtual std::vector<int> getOutputShape() const = 0;
+
+    // Return a variant-based representation of the data type for profiling
+    virtual SensorOutput getOutputShapeVariant() const = 0;
 
     virtual void simulateData(ParallelQueue& queue, int sensorId) = 0; // Pass queue to push data
 

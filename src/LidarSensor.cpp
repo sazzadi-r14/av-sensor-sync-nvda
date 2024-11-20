@@ -27,6 +27,11 @@ std::vector<int> LidarSensor::getOutputShape() const {
     return outputShape;
 }
 
+SensorOutput LidarSensor::getOutputShapeVariant() const {
+    return std::vector<std::vector<float>>(
+        n, std::vector<float>{0.0f, 0.0f, 0.0f, 0.0f}); // x, y, z, intensity
+}
+
 void LidarSensor::simulateData(ParallelQueue& queue, int sensorId) {
     while (true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(responseRate.first));
@@ -45,6 +50,6 @@ void LidarSensor::simulateData(ParallelQueue& queue, int sensorId) {
         };
 
         queue.push(sensorData);
-        std::cout << "Lidar (" << model << ") pushed point cloud data.\n";
+        //std::cout << "Lidar (" << model << ") pushed point cloud data.\n";
     }
 }
