@@ -2,9 +2,6 @@
 
 # AV Sensor Synchronization Simulation
 
-
-This function/module is part of the system's computational graph.
-
 ![Computational Graph](cfg.png)
 
 The detailed design of the current computational graph is illustrated below:
