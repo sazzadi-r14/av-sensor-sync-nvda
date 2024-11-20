@@ -99,10 +99,17 @@ To add a new sensor type:
 
 
 
+
 Assumptions in the system
 based on https://developer.nvidia.com/drive/ecosystem-orin
 add atleast one of all kind of supported sensors.
 Lidar, Radar, GNSS, Camera
+
+
+![Brainstorm](brain_storm.jpg)
+
+
+
 
 one thing you wanna think about that tsensors might percieve differetn thing by the time input from another sensor ocmes in, you have to make a design decision of what's the right thing to do under this situation. do you take average, or something else, or do you just take the earliest possible response or something like that.
 

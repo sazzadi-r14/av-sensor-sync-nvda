@@ -72,7 +72,7 @@ void SensorManager::profileSystem() {
 
     std::cout << "Total Estimated Throughput: " << (total_throughput) / (1024 * 1024) << " MB/s\n";
 
-    refreshRate = maxWorstCaseTime*2; // WCET as the system refresh rate
+    refreshRate = maxWorstCaseTime * 3; // WCET as the system refresh rate
 
     std::cout << "\nSystem Refresh Rate (WCET): " << refreshRate << " ms\n";
     std::cout << "Press ENTER to confirm and start the system...\n";
