@@ -31,7 +31,7 @@ std::vector<SensorData> ParallelQueue::retrieveAllAndClear() {
     }
 
     // Clear the latest readings as well
-    latestReadings.clear();
+    // latestReadings.clear();
 
     return allData;
 }

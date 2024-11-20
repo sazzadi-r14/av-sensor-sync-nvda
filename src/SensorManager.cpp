@@ -188,11 +188,11 @@ void SensorManager::saveDataToDisk(const std::vector<SensorData>& data) {
 
 void SensorManager::sendToControlSystem(const std::unordered_map<int, SensorData>& latestData) {
     cout << "=== Sending one round of Data to Control System ===\n";
-    // for (const auto& [id, sensorData] : latestData) {
-    //     // Simulate sending to the control system
-    //     std::cout << "Sending data to control system: Sensor ID " << id
-    //               << ", Type: " << sensorData.sensorType << std::endl;
-    // }
+    for (const auto& [id, sensorData] : latestData) {
+        // Simulate sending to the control system
+        std::cout << "Sending data to control system: Sensor ID " << id
+                  << ", Type: " << sensorData.sensorType << std::endl;
+    }
 }
 
 int SensorManager::calculateRefreshRate() {
