@@ -40,3 +40,4 @@ CMakeCache.txt
 build/
 .vscode/
 sensor_data.json
+include/nlohmann/json.hpp
